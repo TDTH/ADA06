@@ -39,6 +39,8 @@ class DBConnection
                 
                 $this->connection->select_db(self::dbname);
 
+                $query  = "SET NAMES utf8;";
+                $query .= "SET CHARACTER SET utf8;";
                 $query  = "CREATE TABLE " . self::dbvocabulary. "(tokenID int not null auto_increment,
                                         token varchar(100) not null unique, 
                                         doccount int not null,
@@ -78,18 +80,18 @@ class DBConnection
                     ON DUPLICATE KEY UPDATE doccount=doccount+$doccount, totalfreq=totalfreq+$totalfreq;";
             $this->connection->query($sql);
 
-            foreach ($value["documents"] as $document => $count) 
+            foreach ($value["documents"] as $docid => $value) 
             {
                 $sql = "INSERT INTO " . self::dbdocument . " (docname, filename, description)
-                    VALUES ('$document', 'lol', 'at you')
+                    VALUES ('$docid', '".$value["name"]."', '".$value["snippet"]."')
                     ON DUPLICATE KEY UPDATE docname=docname;";
                 $this->connection->query($sql);
 
                 $sql = "INSERT INTO " . self::dbposting . " (tokenID, documentID, count)
                     VALUES (
                         (SELECT tokenID from " . self::dbvocabulary . " WHERE token='$token'),
-                        (SELECT documentID from " . self::dbdocument . " WHERE docname='$document'),
-                        '$count'
+                        (SELECT documentID from " . self::dbdocument . " WHERE docname='$docid'),
+                        '".$value["count"]."'
                     );";
                 $this->connection->query($sql);
             }
