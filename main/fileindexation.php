@@ -51,7 +51,7 @@ class Indexation
             }
             print("</ul>");
         }
-       
+        print("pipapopo"); 
         return $invertedIndex;
     }
 }
