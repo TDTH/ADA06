@@ -43,7 +43,7 @@ class Indexation
             }
         }
 
-        
+        /*        
         foreach ($invertedIndex as $token => $value)
         {
             print("<p>\"".$token."\" tiene una frecuencia total = ".$value["frequency"]." y aparece en:</p><ul>");
@@ -55,6 +55,8 @@ class Indexation
             }
             print("</ul>");
         }
+         */
+
         return $invertedIndex;
     }
 }
