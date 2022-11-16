@@ -4,7 +4,7 @@ class DBConnection
 {
     const server    = "localhost";
     const username  = "root";
-    const password = "admin";
+    const password = "";
     const dbname = "invertedindex";
     const dbvocabulary = "vocabulary";
     const dbposting = "posting";
@@ -47,6 +47,7 @@ class DBConnection
 
                 $query .= "CREATE TABLE " . self::dbdocument . " (documentID int not null auto_increment,
                                         docname varchar(100) not null unique,
+                                        description varchar(51) not null,
                                         primary key (documentID));";
 
                 $query .= "CREATE TABLE " . self::dbposting ." (postingID int not null auto_increment,
@@ -78,8 +79,8 @@ class DBConnection
 
             foreach ($value["documents"] as $document => $count) 
             {
-                $sql = "INSERT INTO " . self::dbdocument . " (docname)
-                    VALUES ('$document')
+                $sql = "INSERT INTO " . self::dbdocument . " (docname, description)
+                    VALUES ('$document', 'aqui va la descripcion de cada documento')
                     ON DUPLICATE KEY UPDATE docname=docname;";
                 $this->connection->query($sql);
 
