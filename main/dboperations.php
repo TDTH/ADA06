@@ -47,6 +47,8 @@ class DBConnection
 
                 $query .= "CREATE TABLE " . self::dbdocument . " (documentID int not null auto_increment,
                                         docname varchar(100) not null unique,
+                                        filename varchar(100) not null,
+                                        description varchar(50) not null,
                                         primary key (documentID));";
 
                 $query .= "CREATE TABLE " . self::dbposting ." (postingID int not null auto_increment,
@@ -78,8 +80,8 @@ class DBConnection
 
             foreach ($value["documents"] as $document => $count) 
             {
-                $sql = "INSERT INTO " . self::dbdocument . " (docname)
-                    VALUES ('$document')
+                $sql = "INSERT INTO " . self::dbdocument . " (docname, filename, description)
+                    VALUES ('$document', 'lol', 'at you')
                     ON DUPLICATE KEY UPDATE docname=docname;";
                 $this->connection->query($sql);
 

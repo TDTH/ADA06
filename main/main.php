@@ -10,7 +10,6 @@ if (isset($_FILES["files"]))
     $fileupload = new FileUpload();
 
     $documentsToIndex = $fileupload->uploadFiles($_FILES["files"]);
-
     $invertedIndex = Indexation::indexDocuments($documentsToIndex);
     $connection->saveInvertedIndex($invertedIndex);
 

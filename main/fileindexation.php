@@ -8,6 +8,8 @@ class Indexation
         
         foreach ($documents as $document)
         {
+            $filename = basename($document);
+            $originalname = substr($filename, strpos($filename, "-") + 1);
             $file_content = file_get_contents($document);
             $file_content = preg_replace("/[^[:alnum:][:space:]á-úÁ-ÚñÑ-]/", "", $file_content);
 
@@ -17,7 +19,9 @@ class Indexation
                 while ($token) 
                 {
                     $word = strtolower($token);
-                    $filename = basename($document);
+                    //$invertedIndex[$word]["documents"][] = $originalname;
+                    //$filename = basename($document);
+                    //$originalname = substr($filename, strpos($filename, "-") + 1);
 
                     if (!array_key_exists($word, $invertedIndex))
                     {
@@ -37,7 +41,7 @@ class Indexation
             }
         }
 
-        /*
+        
         foreach ($invertedIndex as $token => $value)
         {
             print("<p>\"".$token."\" tiene una frecuencia total = ".$value["frequency"]." y aparece en:</p><ul>");
@@ -47,7 +51,7 @@ class Indexation
             }
             print("</ul>");
         }
-        */
+       
         return $invertedIndex;
     }
 }
