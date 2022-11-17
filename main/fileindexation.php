@@ -4,7 +4,7 @@ class Indexation
 {
     static function indexDocuments($documents)
     {
-        $invertedIndex = [];
+        $documentData = [];
         
         foreach ($documents as $document)
         {
@@ -15,6 +15,12 @@ class Indexation
             $snippet = substr($file_content, 0, 50);
 
             if ($file_content)
+            {
+                $documentData[$filename] = ["name"    => $originalname, 
+                                            "content" => $file_content,
+                                            "snippet" => $snippet];
+            }
+                /*
             {
                 $token = strtok($file_content, " \t\r\n\v\f");
                 while ($token) 
@@ -40,7 +46,7 @@ class Indexation
 
                     $token = strtok(" \t\r\n\v\f");
                 }
-            }
+            }*/
         }
 
         /*        
@@ -57,6 +63,6 @@ class Indexation
         }
          */
 
-        return $invertedIndex;
+        return $documentData;
     }
 }
