@@ -5,9 +5,7 @@ class DBConnection
     const server    = "localhost";
     const username  = "root";
     const password = "admin";
-    const dbname = "invertedindex";
-    const dbvocabulary = "vocabulary";
-    const dbposting = "posting";
+    const dbname = "fulltextindex";
     const dbdocument = "document";
 
     private $connection = null;
@@ -41,25 +39,12 @@ class DBConnection
 
                 $query  = "SET NAMES utf8;";
                 $query .= "SET CHARACTER SET utf8;";
-                $query  = "CREATE TABLE " . self::dbvocabulary. "(tokenID int not null auto_increment,
-                                        token varchar(100) not null unique, 
-                                        doccount int not null,
-                                        totalfreq int not null,
-                                        primary key (TokenID));";
-
                 $query .= "CREATE TABLE " . self::dbdocument . " (documentID int not null auto_increment,
                                         docname varchar(100) not null unique,
                                         filename varchar(100) not null,
+                                        content varchar(20000) not null,
                                         description varchar(50) not null,
                                         primary key (documentID));";
-
-                $query .= "CREATE TABLE " . self::dbposting ." (postingID int not null auto_increment,
-                                        tokenID int not null,
-                                        documentID int not null,
-                                        count int not null,
-                                        PRIMARY KEY (postingID),
-                                        FOREIGN KEY (tokenID) references " . self::dbvocabulary . " (tokenID),
-                                        foreign key (documentID) references " . self::dbdocument . " (documentID));";
 
                 $result = $this->connection->multi_query($query);
                 if ($result) do {} while ($this->connection->next_result());
@@ -69,33 +54,16 @@ class DBConnection
         }
     }
 
-    function saveInvertedIndex($invertedIndex)
+    function saveDocumentData($documentData)
     {
-        foreach ($invertedIndex as $token => $value) {
-            $doccount = count($value["documents"]);
-            $totalfreq = $value["frequency"];
-
-            $sql = "INSERT INTO " . self::dbvocabulary . " (token, doccount, totalfreq) 
-                    VALUES ('$token', '$doccount', '$totalfreq')
-                    ON DUPLICATE KEY UPDATE doccount=doccount+$doccount, totalfreq=totalfreq+$totalfreq;";
-            $this->connection->query($sql);
-
-            foreach ($value["documents"] as $docid => $value) 
-            {
-                $sql = "INSERT INTO " . self::dbdocument . " (docname, filename, description)
-                    VALUES ('$docid', '".$value["name"]."', '".$value["snippet"]."')
+        foreach ($documentData as $document => $data) {
+            $sql = "INSERT INTO " . self::dbdocument . " (docname, filename, content, description)
+                    VALUES ('$document', '".$data["name"]."', '".$data["content"]."', '".$data["snippet"]."')
                     ON DUPLICATE KEY UPDATE docname=docname;";
-                $this->connection->query($sql);
-
-                $sql = "INSERT INTO " . self::dbposting . " (tokenID, documentID, count)
-                    VALUES (
-                        (SELECT tokenID from " . self::dbvocabulary . " WHERE token='$token'),
-                        (SELECT documentID from " . self::dbdocument . " WHERE docname='$docid'),
-                        '".$value["count"]."'
-                    );";
-                $this->connection->query($sql);
-            }
+            $this->connection->query($sql);
         }
+        $sql = "ALTER TABLE " . self::dbdocument . " ADD FULLTEXT (content);";
+        $this->connection->query($sql);
     }
 
     function close()
