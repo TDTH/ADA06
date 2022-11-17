@@ -42,21 +42,6 @@ class Indexation
                 }
             }
         }
-
-        /*        
-        foreach ($invertedIndex as $token => $value)
-        {
-            print("<p>\"".$token."\" tiene una frecuencia total = ".$value["frequency"]." y aparece en:</p><ul>");
-            foreach ($value["documents"] as $index => $value)
-            {
-                print("<li>$index ".$value["count"]." ".($value["count"] == 1 ? "vez" : "veces")."</li>");
-                print("<li>Nombre: ".$value["name"]."</li>");
-                print("<li>Fragmento: ".$value["snippet"]."</li>");
-            }
-            print("</ul>");
-        }
-         */
-
         return $invertedIndex;
     }
 }

@@ -58,27 +58,6 @@ for ($i = 0; $i < count($searchWords); $i++) {
 
 }
 
-/* echo '<div class="container">';
-$result = mysqli_query($conection, $query);
-if ($result && mysqli_num_rows($result) > 0) {
-  echo '<h3>Resultados:</h3>';
-  while ($row = mysqli_fetch_assoc($result)) {
-    $tokenID = $row['tokenID'];
-    $queryPosting = "SELECT * FROM posting WHERE tokenID = '$tokenID'";
-    $resultPosting = mysqli_query($conection, $queryPosting);
-    while ($rowPosting = mysqli_fetch_assoc($resultPosting)) {
-        echo $rowPosting['documentID'];
-    }
-    echo '<div>';
-    echo $row['token'];
-    echo '</div>';
-  }
-} else {
-    echo '<h3>Resultados:</h3>';
-    echo '<h4>No se encontraron resultados de esa consulta</h4>';
-}
-echo '</div>'; */
-
 $matrixTokens = [[]];
 $indexMatrix = 0;
 
@@ -90,12 +69,10 @@ $result = mysqli_query($conection, $query);
 if ($result && mysqli_num_rows($result) > 0) {
 while ($row = mysqli_fetch_assoc($result)) {
     $idf = log10($NumDocs / $row['doccount']);
-
     /* $e = $row['doccount'];
     echo "numDocs: ".$NumDocs."<br>";
     echo "doccount: ".$e."<br>";
     echo "idf: ".$idf."<br>"; */
-    
     $tokenID = $row['tokenID'];
     $token = $row['token'];
     $queryPosting = "SELECT * FROM posting WHERE tokenID = '$tokenID'";
@@ -122,8 +99,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         //echo $rowPosting['documentID']."<br>";
         
     }
-
-/*     echo '<div>';
+    /* echo '<div>';
     echo $row['token'];
     echo '</div>'; */
 }
@@ -133,14 +109,14 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 
 echo '<h3>Resultados:</h3>';
-
 arsort($mT);
 foreach($mT as $key => $val){
     $queryDoc = "SELECT * FROM document WHERE documentID = '$key'";
     $resultDoc = mysqli_query($conection, $queryDoc);
     $values = mysqli_fetch_array($resultDoc);
     echo '<div style="border: 1px solid black; padding: 1rem; margin-bottom:10px">';
-    echo '<a href="download.php?file='.$values['docname'].'">'.$values['docname'].'</a><br><br>';
+    echo '<a href="download.php?file='.$values['docname'].'">'.$values['filename'].'</a><br><br>';
+    echo $values['description'].'<br><br>';
     echo '<em>rating: '.$val.'</em><br>';
     echo '</div>';
 }
