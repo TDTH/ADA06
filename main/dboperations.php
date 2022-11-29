@@ -4,7 +4,7 @@ class DBConnection
 {
     const server    = "localhost";
     const username  = "root";
-    const password = "admin";
+    const password = "";
     const dbname = "fulltextindex";
     const dbdocument = "document";
 

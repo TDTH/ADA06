@@ -1,0 +1,19 @@
+cargar archivos de texto plano desde formulario
+cuando se carguen los archivos, crear índice invertido con ellos.
+el indice estará en MySQL:
+* termino índice
+* numero de documentos que lo contienen
+* total de frecuencias
+* identificador de documento
+* frecuencia del término en ese documento
+* nombre del archivo de texto
+* porcion del texto (50 caracteres).
+
+// IMPLEMENTACION DE FUNCION CADENA (guardar en los posting las posiciones del término índice dentro del documento).
+
+Una consulta resultará en los enlaces a los archivos descargables junto con el fragmento de texto almacenado. Indicar el valor de la función de similitud Coseno.
+Los archivos que aparezcan en el resultado serán ordenados de acuerdo a tf-idf.
+
+// VAMOS A LA FASE DE INDEXIZACIÓN
+Column vocabulary   => token
+column ni		    => n. of documents where the token appears.
